@@ -18,16 +18,13 @@ public class MatriJ {
 	private double[][] matrix;
 	private int rows;
 	private int cols;
-	private boolean isSquare;
 		
 	//CONSTRUCTOR
 	public MatriJ(double[][] matrix) throws NotAMatrixException {
 		if (MatriJ.isMatrix(matrix)){
 			rows = matrix.length;
 			cols = matrix[0].length;
-			matrix = new double[rows][cols];
 			this.matrix = matrix;
-			isSquare = (rows == cols);
 		}
 		else{
 			throw new NotAMatrixException("This is not a proper rectangular 2D Matrix");
@@ -69,9 +66,6 @@ public class MatriJ {
 	public void set(double n, int i, int j){
 		this.matrix[i][j] = n;
 	}
-	public boolean isSquare(){
-		return this.isSquare;
-	}
 	
 	public int getRowNum(){
 		return this.rows;
@@ -84,6 +78,11 @@ public class MatriJ {
 	public double[][] getMatriJArray(){
 		return this.matrix;
 	}
+	
+	public boolean isSquare(){
+		return this.rows == this.cols;
+	}
+
 	
 	//METHOD	
 	public double get(int rowIndex, int colIndex){
@@ -110,7 +109,7 @@ public class MatriJ {
 			double[][] res = new double[this.getRowNum()][this.getColNum()];
 			for (int i = 0; i < this.rows; i++){
 				for (int j = 0; j < this.cols; j++){
-					res[i][j] = this.get(i, j) + this.get(i, j);
+					res[i][j] = this.get(i, j) + mat.get(i, j);
 				}
 			}
 			try{
@@ -144,4 +143,32 @@ public class MatriJ {
 		return this.add(mat.scalarMulti(-1));
 	}
 	
+	public MatriJ multi(MatriJ mat){
+		if (this.cols == mat.rows){
+			return null;
+		}
+		else{
+			double[][] res = new double[this.rows][mat.cols];
+			for (int i = 0; i < this.rows; i++){
+				for (int j = 0; j < this.cols; j++){
+					res[i][j] += this.get(j,i) + mat.get(i,j);
+				}
+			}
+			try{
+				return new MatriJ(res);
+			}
+			catch(Exception e){return null;	}	//Unexpected to happen
+		}
+	}
+	
+	public String toString(){
+		String res = "";
+		for (int i = 0; i < this.rows; i++){
+			for (int j = 0; j < this.cols; j++){
+				res += "" + this.get(i, j) + ", \t";
+			}
+			res += "\n";
+		}
+		return res;
+	}
 }
