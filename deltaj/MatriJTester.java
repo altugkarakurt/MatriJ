@@ -39,6 +39,10 @@ public class MatriJTester {
 			System.out.println(mat1.sub(mat2));
 			System.out.println("Multiplication of both matrices: ");
 			System.out.println(mat2.multi(mat1));
+			System.out.println("Transpose of mat1");
+			System.out.println(mat1.transpose());
+			System.out.println("Transpose of mat2");
+			System.out.println(mat2.transpose());
 		}
 		catch(Exception e){
 			System.out.println("Failed to create the MatriJs");

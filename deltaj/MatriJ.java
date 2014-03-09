@@ -103,6 +103,48 @@ public class MatriJ {
 		return count;
 	}
 	
+	public boolean equals(MatriJ mat){
+	//if the size of two MatriJs are not equal, returns false. If they are equal,
+	//checks for every element in their 2D arrays for equality
+		if(this.getRowNum() == mat.getRowNum() && this.getColNum() == mat.getColNum()){
+			for (int i = 0; i < this.getRowNum(); i++){
+				for (int j = 0; j < this.getColNum(); j++){
+					if (this.get(i, j) != mat.get(i, j)){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean isSymmetric(){
+	//checks for the condition A^T ?= A
+		return this.equals(this.transpose());
+	}
+	
+	public boolean isSkewSymmetric(){
+		//checks for the condition A^T ?= -A	
+		return (this.scalarMulti(-1)).equals(this.transpose());
+	}
+	
+	public MatriJ transpose(){
+	//returns the transpose of the calling MatriJ
+		double[][] res = new double[this.getColNum()][this.getRowNum()];
+		for (int i = 0; i < this.getRowNum(); i++){
+			for (int j = 0; j < this.getColNum(); j++){
+				res[j][i] = this.get(i, j);
+			}
+		}
+		try{
+			return new MatriJ(res);
+		}
+		catch(Exception e){return null;} //Unexpected to happen
+	}
+	
 	public MatriJ add(MatriJ mat){
 	//adds two given matrices and returns the result as a MatriJ
 		if (this.getColNum() == mat.getColNum() && this.getRowNum() == mat.getRowNum()){
