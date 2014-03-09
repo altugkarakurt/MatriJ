@@ -86,15 +86,15 @@ public class MatriJ {
 	
 	//METHOD	
 	public double get(int rowIndex, int colIndex){
-		return (rowIndex <= this.rows && colIndex <= this.cols) ? this.matrix[rowIndex][colIndex] : null;		
+		return (rowIndex <= this.getRowNum() && colIndex <= this.getColNum()) ? this.matrix[rowIndex][colIndex] : null;		
 	}
 	
 	public int countRecurrence(double n){
 	//Searches the entire MatriJ for the input value n and returns the number of
 	//it's appearances
 		int count = 0;
-		for (int i = 0; i < this.rows; i++){
-			for (int j = 0; j < this.cols; j++){
+		for (int i = 0; i < this.getRowNum(); i++){
+			for (int j = 0; j < this.getColNum(); j++){
 				if (n == this.get(i, j)){
 					count++;
 				}
@@ -107,8 +107,8 @@ public class MatriJ {
 	//adds two given matrices and returns the result as a MatriJ
 		if (this.getColNum() == mat.getColNum() && this.getRowNum() == mat.getRowNum()){
 			double[][] res = new double[this.getRowNum()][this.getColNum()];
-			for (int i = 0; i < this.rows; i++){
-				for (int j = 0; j < this.cols; j++){
+			for (int i = 0; i < this.getRowNum(); i++){
+				for (int j = 0; j < this.getColNum(); j++){
 					res[i][j] = this.get(i, j) + mat.get(i, j);
 				}
 			}
@@ -126,8 +126,8 @@ public class MatriJ {
 	//multiplies all indices of the calling MatriJ with the constant n and returns the result
 	//as a MatriJ		 
 		double[][] res = new double[this.getRowNum()][this.getColNum()];
-		for (int i = 0; i < this.rows; i++){
-			for (int j = 0; j < this.cols; j++){
+		for (int i = 0; i < this.getRowNum(); i++){
+			for (int j = 0; j < this.getColNum(); j++){
 				res[i][j] = (this.get(i, j) * n);
 			}
 		}
@@ -144,27 +144,30 @@ public class MatriJ {
 	}
 	
 	public MatriJ multi(MatriJ mat){
-		if (this.cols == mat.rows){
+	//multiplies two matrices. m1.multi(m2) gives m1 x m2. if the matrices are 
+	//not multipliable returns null 
+		if (this.getColNum() != mat.getRowNum()){
 			return null;
 		}
 		else{
-			double[][] res = new double[this.rows][mat.cols];
-			for (int i = 0; i < this.rows; i++){
-				for (int j = 0; j < this.cols; j++){
-					res[i][j] += this.get(j,i) + mat.get(i,j);
+			double[][] res = new double[this.getRowNum()][mat.getColNum()];
+			for (int i = 0; i < this.getRowNum(); i++){
+				for (int j = 0; j < mat.getColNum(); j++){
+					for (int k = 0; k < this.getColNum(); k++)
+						res[i][j] += this.get(i,k) * mat.get(k,j);
 				}
 			}
 			try{
 				return new MatriJ(res);
 			}
-			catch(Exception e){return null;	}	//Unexpected to happen
+			catch(Exception e){	return null;	}	//Unexpected to happen
 		}
 	}
 	
 	public String toString(){
 		String res = "";
-		for (int i = 0; i < this.rows; i++){
-			for (int j = 0; j < this.cols; j++){
+		for (int i = 0; i < this.getRowNum(); i++){
+			for (int j = 0; j < this.getColNum(); j++){
 				res += "" + this.get(i, j) + ", \t";
 			}
 			res += "\n";
