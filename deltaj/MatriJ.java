@@ -20,14 +20,11 @@ public class MatriJ {
 	private int cols;
 		
 	//CONSTRUCTOR
-	public MatriJ(double[][] matrix) throws NotAMatrixException {
+	public MatriJ(double[][] matrix){
 		if (MatriJ.isMatrix(matrix)){
 			rows = matrix.length;
 			cols = matrix[0].length;
 			this.matrix = matrix;
-		}
-		else{
-			throw new NotAMatrixException("This is not a proper rectangular 2D Matrix");
 		}
 	}
 	
@@ -40,26 +37,6 @@ public class MatriJ {
 			}
 		}
 		return true;
-	}
-	
-	public static MatriJ arrayToMatriJ(double[] list, int row, int col){
-	//For flexibility, this method gets the matrix as a 1D list and converts into
-	//a 2D one and generates a MatriJ from it.
-		if (((row*col) != list.length) || list == null || row*col == 0){
-			return null;
-		}
-		else{
-			double[][] matrix = new double[row][col];
-			for(int i = 0; i < list.length; i++){
-				matrix[((int)i / row)][((int)i % row)] = list[i];	//CHECK
-			}
-			try{
-				return new MatriJ(matrix);
-			}
-			catch(NotAMatrixException e){
-				return null;
-			}
-		}
 	}
 	
 	//GETTERS - SETTERS
@@ -75,7 +52,7 @@ public class MatriJ {
 		return this.cols;
 	}
 	
-	public double[][] getMatriJArray(){
+	public double[][] getMatrix(){
 		return this.matrix;
 	}
 	
@@ -86,7 +63,15 @@ public class MatriJ {
 	
 	//METHOD	
 	public double get(int rowIndex, int colIndex){
-		return (rowIndex <= this.getRowNum() && colIndex <= this.getColNum()) ? this.matrix[rowIndex][colIndex] : null;		
+		return (rowIndex <= this.getRowNum() && colIndex <= this.getColNum()) ? this.get(rowIndex, colIndex) : null;		
+	}
+	
+	public static MatriJ identity(int n){
+		double[][] res = new double[n][n];
+		for (int i = 0; i < n; i++){
+			res[i][i] = 1;
+		}
+		return new MatriJ(res);
 	}
 	
 	public int countRecurrence(double n){
@@ -139,10 +124,7 @@ public class MatriJ {
 				res[j][i] = this.get(i, j);
 			}
 		}
-		try{
-			return new MatriJ(res);
-		}
-		catch(Exception e){return null;} //Unexpected to happen
+		return new MatriJ(res);
 	}
 	
 	public MatriJ add(MatriJ mat){
@@ -154,10 +136,7 @@ public class MatriJ {
 					res[i][j] = this.get(i, j) + mat.get(i, j);
 				}
 			}
-			try{
-				return new MatriJ(res);
-			}
-			catch(Exception e){return null;} //Unexpected to happen
+			return new MatriJ(res);
 		}
 		else{
 			return null;
@@ -173,10 +152,7 @@ public class MatriJ {
 				res[i][j] = (this.get(i, j) * n);
 			}
 		}
-		try{
-			return new MatriJ(res);
-		}
-		catch(Exception e){return null;}	//Unexpected to happen
+		return new MatriJ(res);
 	}
 	
 	public MatriJ sub(MatriJ mat){
@@ -195,14 +171,12 @@ public class MatriJ {
 			double[][] res = new double[this.getRowNum()][mat.getColNum()];
 			for (int i = 0; i < this.getRowNum(); i++){
 				for (int j = 0; j < mat.getColNum(); j++){
-					for (int k = 0; k < this.getColNum(); k++)
+					for (int k = 0; k < this.getColNum(); k++){
 						res[i][j] += this.get(i,k) * mat.get(k,j);
+					}
 				}
 			}
-			try{
-				return new MatriJ(res);
-			}
-			catch(Exception e){	return null;	}	//Unexpected to happen
+			return new MatriJ(res);
 		}
 	}
 	
